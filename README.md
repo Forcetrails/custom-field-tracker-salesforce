@@ -1,3 +1,7 @@
+# Install As Unmanaged Package
+
+[Install Custom Field Tracker Unmanaged Package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5g0000002I4N)
+
 # Salesforce DX Project: Next Steps
 
 Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
