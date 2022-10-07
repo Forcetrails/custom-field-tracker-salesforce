@@ -50,11 +50,13 @@ class AccountTriggerTest {
 
 		for (Account acc : accounts) {
 			acc.BillingCountry = 'India';
+			acc.Description = 'Test Description';
 		}
 
 		update accounts;
 
 		Test.startTest();
+
 		System.assertEquals(
 			[
 					SELECT Id
@@ -68,6 +70,19 @@ class AccountTriggerTest {
 			200,
 			'Field history records not found'
 		);
+		System.assertEquals(
+			[
+					SELECT Id
+					FROM Field_History__c
+					WHERE
+						Tracked_Field_API__c = 'Description'
+						AND Tracked_Record_Id__c IN :accountIds
+				]
+				?.size(),
+			200,
+			'Field history records not found'
+		);
+
 		Test.stopTest();
 	}
 }

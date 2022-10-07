@@ -27,17 +27,40 @@ class FieldTrackerServiceTest {
 		Account[] accounts = [SELECT id FROM Account];
 		for (Account acc : accounts) {
 			acc.BillingCountry = 'India';
+			acc.Description = 'Test Description';
 		}
+
+		Set<Id> accountIds = new Map<Id, Account>(accounts).keySet();
 
 		update accounts;
 
-		System.assert(
+		Test.startTest();
+
+		System.assertEquals(
 			[
-				SELECT Id
-				FROM Field_History__c
-				WHERE Tracked_Field_API__c = 'BillingCountry'
-			]
-			?.size() > 0
+					SELECT Id
+					FROM Field_History__c
+					WHERE
+						Tracked_Field_API__c = 'BillingCountry'
+						AND Tracked_Record_Id__c IN :accountIds
+						AND Old_Value__c = 'United States'
+				]
+				?.size(),
+			200,
+			'Field history records not found'
 		);
+		System.assertEquals(
+			[
+					SELECT Id
+					FROM Field_History__c
+					WHERE
+						Tracked_Field_API__c = 'Description'
+						AND Tracked_Record_Id__c IN :accountIds
+				]
+				?.size(),
+			200,
+			'Field history records not found'
+		);
+		Test.stopTest();
 	}
 }
